@@ -8,7 +8,6 @@ async function signIn(url){
 	await page.goto(url);
 	const [signIn] = await page.$x('//*[@id="landing-page-app"]/div/div[1]/div[3]/div[1]/div/div/div[2]/div/a[5]/span');
 	const signInPage = page.click(signIn,'left')
-	
 }
 
 scrapeLeetCode(baseUrl)
