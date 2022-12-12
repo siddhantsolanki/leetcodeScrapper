@@ -1,13 +1,24 @@
-const baseUrl = "https://leetcode.com/"
+const baseUrl = "https://leetcode.com/accounts/login/"
 const puppeteer = require('puppeteer');
+const userName = "testUser"
+const password = "testPassword"
 
 async function signIn(url){
-	// this is the function to perform signIn
 	const browser = await puppeteer.launch({headless : false});
 	const page = await browser.newPage();
 	await page.goto(url);
-	const [signInlink] = await page.$x('//*[@id="landing-page-app"]/div/div[1]/div[3]/div[1]/div/div/div[2]/div/a[5]/span')
-	signInlink.click()
+	await page.waitForSelector('.input__2o8B')
+	const [userNameField] = await page.$x('//*[@id="id_login"]')
+	await userNameField.type(userName)
+	const [passwordField] = await page.$x('//*[@id="id_password"]')
+	await passwordField.type(password)
+	
+	await page.evaluate(() => {
+		document.querySelector('#signin_btn > div').click();
+	});
+	await page.waitForSelector('#navbar-right-container > div:nth-child(3) > a')
+	const streakValue = await page.evaluate(() => document.querySelector('#navbar-right-container > div:nth-child(3) > a > span').innerHTML)
+	console.log(streakValue) // streak value printed
 }
 
 signIn(baseUrl)
